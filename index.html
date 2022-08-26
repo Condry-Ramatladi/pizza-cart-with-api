@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PizzaCart_APIWidget</title>
+    <script src="APIwidget.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+
+    </style>
+    <script>
+
+    </script>
+
+</head>
+
+<body>
+    <div class="main" x-data="pizzaCartWithAPIWidget">
+        <h1>Perfect Pizza</h1>
+
+
+        <div class="head">
+
+            <div x-text="message"></div>
+            <div>Total:<span x-text="total"></span></div>
+
+            <div>
+                <label for="user">Who is buying the pizzas</label>
+                <input type="text" x-model="username" id="user">
+            </div>
+            <div>Cart ID: <span x-text="cartId"></span></div>
+            <h2>Pizzas you can order</h2>
+
+        </div>
+
+
+        <h3>
+
+            <div class="cart" x-show="showCartBool">
+                <table>
+                    <caption scope="col">Pizza-Cart________________[ID: <span x-text="cartId"></span>]</caption>
+                    <thead>
+                        <tr>
+                            <td scope="col">Flavour</td>
+                            <td scope="col">Qty</td>
+                            <td scope="col">Total</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="pizza in cart.pizzas">
+                            <tr>
+                                <td x-text="pizza.flavour"></td>
+                                <td x-text="pizza.qty"></td>
+                                <td x-text="pizza.total"></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <th>Cart total: R<strong x-text="cart.total.toFixed(2)"></strong>
+                            </th>
+                            <td><button>Pay</button></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="menu">
+                <table>
+                    <caption><strong>MENU: </strong> Pick the one! from <span style="border-radius: 0.1em;"
+                            x-text="pizzas.length"></span>
+                        flavours Available!</2>
+                    </caption>
+                    <thead <img src="background-pizza.jpg">>
+                        <tr>
+                            <td><strong>PIZZA</strong></td>
+                            <td scope="col">Flavour</td>
+                            <td scope="col">Type</td>
+                            <td scope="col">Size</td>
+                            <td scope="col">Price</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <template x-for="pizza in pizzas">
+                        <tr>
+                            <td><img x-bind:src="pizzaImg(pizza)" height="80"></td>
+                            <td x-text="pizza.flavour"></td>
+                            <td x-text="pizza.type"></td>
+                            <td x-text="pizza.size"></td>
+                            <td x-text="pizza.price"></td>
+                            <td>
+                                <button x-on:click="add(pizza)">Buy</button>
+                            </td>
+                        </tr>
+                    </template>
+                </table>
+            </div>
+        </h3>
+    </div>
+</body>
+
+</html>
