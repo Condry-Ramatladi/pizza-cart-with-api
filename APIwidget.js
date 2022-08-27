@@ -59,8 +59,9 @@ document.addEventListener('alpine:init', () => {
         },
 
         pizzaImg(pizza){
-          return `/img/${pizza.size}.png`;
+          return `/image/${pizza.size}.png`;
         },
+      
 
         pay(){
           alert('payyy') 
