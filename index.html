@@ -42,6 +42,18 @@
 
         <h3>
 
+            <div class="special">
+                <table>
+                    <tr>
+                        <template x-for="pizza in pizzas">
+                            <td>
+                                
+                            </td>
+                        </template>
+                    </tr>
+                </table>
+            </div>
+
             <div class="cart" x-show="showCartBool">
                 <table>
                     <caption scope="col">Pizza-Cart________________[ID: <span x-text="cartId"></span>]</caption>

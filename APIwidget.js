@@ -58,8 +58,25 @@ document.addEventListener('alpine:init', () => {
                 .catch(err => alert(err) ); 
         },
 
+        remove(pizza){
+          //alert(pizza.flavour+" : "+ pizza.size) 
+          this.showCartBool = true;
+            const params = {
+              cart_code: this.cartId,
+              pizza_id: pizza.id 
+            }
+
+            axios
+                .post('https://pizza-cart-api.herokuapp.com/api/pizza-cart/remove', params)
+                .then(() => {
+                  this.message = "Pizza removed from the cart"
+                  this.showCart();
+                } )
+                .catch(err => alert(err) ); 
+        },
+
         pizzaImg(pizza){
-          return `/image/${pizza.size}.png`;
+          return `/${pizza.size}.png`;
         },
       
 
