@@ -15,6 +15,7 @@ document.addEventListener('alpine:init', () => {
                 .then((result) => {
                     this.cartId = result.data.cart_code;
                 })
+      
         },
         createCart(){
           return axios
@@ -29,17 +30,20 @@ document.addEventListener('alpine:init', () => {
               .then((result) => {
                 this.cart = result.data;
                 this.total =result.data.total;
+                this.paid =result.data.status;
               });
         },
 
-        message: 'Ready to Order?',
+        'message': 'Ready to Order now?',
         username: 'Condry',
         pizzas: [],
         cartId: '',
         cart : {total : 0},
         showCartBool: false,
         total: '',
-        payday:'',
+        paymentAmount: '',
+        paymentMessage: 'Awaiting Payment',
+        paid: '',
 
         add(pizza){
           //alert(pizza.flavour+" : "+ pizza.size) 
@@ -60,7 +64,6 @@ document.addEventListener('alpine:init', () => {
 
         remove(pizza){
           //alert(pizza.flavour+" : "+ pizza.size) 
-          this.showCartBool = true;
             const params = {
               cart_code: this.cartId,
               pizza_id: pizza.id 
@@ -73,28 +76,65 @@ document.addEventListener('alpine:init', () => {
                   this.showCart();
                 } )
                 .catch(err => alert(err) ); 
+                if(this.total == 0){
+                  this.showCartBool = false;
+                }
         },
 
         pizzaImg(pizza){
-          return `/${pizza.size}.png`;
+          return `/image/${pizza.size}.png`;
         },
       
 
-        pay(){
-          alert('payyy') 
-            const params = {
-              cart_code: this.cartId,
-              total: this.total 
-            }
+        // pay(){
+        //   alert('pay') 
+        //     const params = {
+        //       cart_code: this.cartId,
+        //       amount: this.payAmount
+        //     }
 
-            axios
-                .post('https://pizza-cart-api.herokuapp.com//api/pizza-cart/pay', params)
-                .then(() => {
-                  this.message = "Pizza added to the cart"
-                  this.showCart();
-                } )
-                .catch(err => alert(err) ); 
-        }
+        //     axios
+        //         .post('https://pizza-cart-api.herokuapp.com/api/pizza-cart/pay', params)
+        //         .then(() => {
+        //           this.payMessage = 'Payment Successful';
+        //         } )
+        // }
+
+        pay() {
+                const params = {
+                  cart_code : this.cartId,
+                  amount: this.paymentAmount
+                  
+                }
+                console.log(params)
+                axios
+                  .post('https://pizza-cart-api.herokuapp.com/api/pizza-cart/pay', params)
+                  .then(() => {
+                      if(!this.paymentAmount) {
+                          this.paymentMessage = 'No amount entered!'
+                      }
+
+                      else if(this.paymentAmount >= this.cart.total.toFixed(2)){
+                          this.paymentMessage = 'Payment Sucessful!'
+                          this.message= this.username  + " Paid!"
+                          setTimeout(() => {
+                              this.cart.total = 0;
+                              this.paymentAmount = 0;
+                              this.paymentMessage = '';
+                              this.message = '';
+                            //   window.location.reload()
+                          }, 3000);
+                      }else{
+                          this.paymentMessage = 'Sorry - You do not have enough money!'
+                          setTimeout(() => {
+                              this.cart.total = '';
+                              
+                              
+                          }, 3000);
+                      }
+                  })
+                  .catch(err=>alert(err));
+              },
 
       }
     });

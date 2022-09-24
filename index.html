@@ -26,33 +26,29 @@
 
 
         <div class="head">
-
-            <div x-text="message"></div>
-            <div>Total:<span x-text="total"></span></div>
-
             <div>
-                <label for="user">Who is buying the pizzas</label>
-                <input type="text" x-model="username" id="user">
+                <template x-for="pizza in fpizzas">
+                    <h2 x-text="pizza.flavour"></h2>
+                </template>
+    
+                <div x-text="message"></div>
+                <div>Total:<span x-text="total"></span></div>
+    
+                <div>
+                    <label for="user">Who is buying the pizzas</label>
+                    <input type="text" x-model="username" id="user">
+                </div>
+                <div>Cart ID: <span x-text="cartId"></span></div>
+                <h2>Pizzas you can order</h2>
             </div>
-            <div>Cart ID: <span x-text="cartId"></span></div>
-            <h2>Pizzas you can order</h2>
-
+            <div>
+                <div>Cart Status: <span x-text="paid"></span></div>
+            </div>
         </div>
 
 
         <h3>
 
-            <div class="special">
-                <table>
-                    <tr>
-                        <template x-for="pizza in pizzas">
-                            <td>
-                                
-                            </td>
-                        </template>
-                    </tr>
-                </table>
-            </div>
 
             <div class="cart" x-show="showCartBool">
                 <table>
@@ -60,16 +56,23 @@
                     <thead>
                         <tr>
                             <td scope="col">Flavour</td>
+                            <td>Size</td>
                             <td scope="col">Qty</td>
                             <td scope="col">Total</td>
+                            <td></td>
                         </tr>
                     </thead>
                     <tbody>
                         <template x-for="pizza in cart.pizzas">
                             <tr>
                                 <td x-text="pizza.flavour"></td>
+                                <td x-text="pizza.size"></td>
                                 <td x-text="pizza.qty"></td>
-                                <td x-text="pizza.total"></td>
+                                <td x-text="pizza.total.toFixed(2)"></td>
+                                <td>
+                                    <button x-on:click="add(pizza)">+</button>
+                                    <button x-on:click="remove(pizza)">-</button>
+                                </td>
                             </tr>
                         </template>
                     </tbody>
@@ -78,7 +81,18 @@
                             <td></td>
                             <th>Cart total: R<strong x-text="cart.total.toFixed(2)"></strong>
                             </th>
-                            <td><button>Pay</button></td>
+                            <td>
+                                <label for="pay">Payment: </label>
+                                <input type="text" x-model="paymentAmount" width= 1>
+                            </td>
+                            <td><button x-on:click="pay()">Pay</button></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <span x-text="paymentMessage"></span>
+                            </td>
                         </tr>
                     </tfoot>
                 </table>
@@ -88,9 +102,9 @@
                 <table>
                     <caption><strong>MENU: </strong> Pick the one! from <span style="border-radius: 0.1em;"
                             x-text="pizzas.length"></span>
-                        flavours Available!</2>
+                        flavours Available!
                     </caption>
-                    <thead <img src="background-pizza.jpg">>
+                    <thead <img src="background-pizza.jpg">
                         <tr>
                             <td><strong>PIZZA</strong></td>
                             <td scope="col">Flavour</td>
@@ -102,13 +116,14 @@
                     </thead>
                     <template x-for="pizza in pizzas">
                         <tr>
-                            <td><img x-bind:src="pizzaImg(pizza)" height="80"></td>
+                            <td><div><img x-bind:src="pizzaImg(pizza)" height="80"></div></td>
                             <td x-text="pizza.flavour"></td>
                             <td x-text="pizza.type"></td>
                             <td x-text="pizza.size"></td>
                             <td x-text="pizza.price"></td>
                             <td>
                                 <button x-on:click="add(pizza)">Buy</button>
+                                <button x-on:click="remove(pizza)">Remove</button>
                             </td>
                         </tr>
                     </template>
