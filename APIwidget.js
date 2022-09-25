@@ -7,6 +7,7 @@ document.addEventListener('alpine:init', () => {
                  .get('https://pizza-cart-api.herokuapp.com/api/pizzas')
                  .then((result)  => {
                      console.log(result.data);
+                     alert(result.data)
                       this.pizzas = result.data.pizzas
                 })
                 .then(() => {
